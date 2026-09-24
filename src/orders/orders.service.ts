@@ -3,8 +3,6 @@ import { randomBytes } from 'node:crypto';
 import { CreateOrderDto } from './dto/create-order.dto.js';
 import { Order, OrderStatus } from './entities/order.entity.js';
 
-// Servicio con "base de datos" en memoria. Al reiniciar el servidor, los
-// datos vuelven a este estado inicial. No hace falta modificar este archivo.
 @Injectable()
 export class OrdersService {
   private readonly orders: Order[] = [
@@ -128,10 +126,6 @@ export class OrdersService {
     return order;
   }
 
-  /**
-   * Simula un reporte pesado (consulta lenta, generación de PDF, etc.).
-   * Tarda ~4.5 s a propósito para que el TimeoutInterceptor (3 s) lo corte.
-   */
   async generateHeavyReport() {
     await new Promise((resolve) => setTimeout(resolve, 4500));
 
