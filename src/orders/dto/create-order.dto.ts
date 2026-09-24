@@ -13,20 +13,6 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-// =============================================================================
-// DTOs de entrada para POST /orders
-// -----------------------------------------------------------------------------
-// Las validaciones (class-validator) YA están hechas: si el body no cumple,
-// el ValidationPipe global responde 400 automáticamente.
-//
-// TODO [Estudiante 4 - Swagger]: agrega @ApiProperty() a cada campo con
-//   `description` y `example`, para que Swagger UI muestre un body de ejemplo
-//   listo para probar con "Try it out".
-//   - En `items` indica el tipo del array: @ApiProperty({ type: [OrderItemDto] })
-//   - Aprovecha opciones como `minimum`, `minItems` o `pattern` para que la
-//     documentación refleje las mismas reglas que las validaciones.
-// =============================================================================
-
 export class OrderItemDto {
   @ApiProperty({
     description: 'id del producto',
@@ -64,33 +50,33 @@ export class OrderItemDto {
 
 export class CreateOrderDto {
   @ApiProperty({
-  description: 'Nombre del cliente',
-  example: 'juan perez',
-})
+    description: 'Nombre del cliente',
+    example: 'juan perez',
+  })
   @IsString()
   @IsNotEmpty()
   customerName: string;
 
   @ApiProperty({
-  description: 'Correo electrónico del cliente',
-  example: 'juan.perez@gmail.com',
-})
+    description: 'Correo electrónico del cliente',
+    example: 'juan.perez@gmail.com',
+  })
   @IsEmail()
   customerEmail: string;
 
   @ApiProperty({
-  description: 'Lista de productos del pedido',
-  type: [OrderItemDto],
-  example: [
-    {
-      productId: 101,
-      productName: 'Teclado mecánico',
-      quantity: 1,
-      unitPrice: 89.9,
-    },
-  ],
-  minItems: 1,
-})
+    description: 'Lista de productos del pedido',
+    type: [OrderItemDto],
+    example: [
+      {
+        productId: 101,
+        productName: 'Teclado mecánico',
+        quantity: 1,
+        unitPrice: 89.9,
+      },
+    ],
+    minItems: 1,
+  })
   @IsArray()
   @ArrayMinSize(1)
   @ValidateNested({ each: true })
@@ -98,10 +84,10 @@ export class CreateOrderDto {
   items: OrderItemDto[];
 
   @ApiProperty({
-  description: 'Número de tarjeta de crédito de 16 dígitos',
-  example: '4111111111114242',
-  pattern: '^\\d{16}$',
-})
+    description: 'Número de tarjeta de crédito de 16 dígitos',
+    example: '4111111111114242',
+    pattern: '^\\d{16}$',
+  })
   @Matches(/^\d{16}$/, {
     message: 'creditCard debe tener exactamente 16 dígitos numéricos',
   })
