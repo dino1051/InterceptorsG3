@@ -25,7 +25,6 @@ export class OrdersController {
 
   @Get()
   @ApiOkResponse({ type: [Order] })
-  @ApiTags('orders')
   @ApiOperation({
     summary: 'Lista todas las ordenes',
     description:
@@ -36,7 +35,6 @@ export class OrdersController {
   }
 
   @Get('reports/heavy-process')
-  @ApiTags('orders')
   @ApiOperation({
     summary: 'Proceso pesado de ordenes',
     description: 'Proceso pesado de ordenes',
@@ -49,7 +47,10 @@ export class OrdersController {
   @Get(':id')
   @ApiNotFoundResponse()
   @ApiOkResponse({ type: Order })
-  @ApiTags('orders')
+  @ApiOperation({
+    summary: 'Lista una orden por su id',
+    description: 'Lista una orden por su id',
+  })
   @ApiParam({
     name: 'id',
     description: 'Lista una orden por su id',
@@ -61,7 +62,6 @@ export class OrdersController {
 
   @Post()
   @ApiBadRequestResponse()
-  @ApiTags('orders')
   @ApiOperation({
     summary: 'Crea una nueva orden',
     description: 'Crea una nueva orden',
