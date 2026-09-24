@@ -39,7 +39,7 @@ export function maskCreditCard(value: string): string {
   //   caracteres. Pista: value.slice(-4)
 
   // ⬇️ Reemplaza esta línea por tu implementación.
-  return value;
+  return '**** **** **** ' + value.slice(-4);
 }
 
 /**
@@ -47,7 +47,6 @@ export function maskCreditCard(value: string): string {
  * limpia. Debe funcionar igual para un pedido suelto que para un array de
  * pedidos, y para objetos anidados a cualquier profundidad.
  */
-export function sanitize(value: unknown): unknown {
   // TODO [Estudiante 4] Paso 2: implementa la limpieza recursiva.
   //   - Si es un array   → return value.map(sanitize)
   //   - Si es un Date    → devuélvelo tal cual (¡un Date también es 'object'!)
@@ -62,6 +61,30 @@ export function sanitize(value: unknown): unknown {
   //   reales. Los tests lo verifican.
 
   // ⬇️ Reemplaza esta línea por tu implementación.
+  export function sanitize(value: unknown): unknown {
+    if (Array.isArray(value)) {
+    return value.map(sanitize);
+  }
+    if (value instanceof Date) {
+    return value;
+  }
+    if (value !== null && typeof value === 'object') {
+    const result: Record<string, unknown> = {};
+
+      for (const [key, val] of Object.entries(value)) {
+        if (REMOVED_FIELDS.includes(key)) {
+        continue;
+      }
+
+        if (MASKED_FIELDS.includes(key)) {
+        result[key] = maskCreditCard(val as string);
+        continue;
+      }
+      result[key] = sanitize(val);
+    }
+    return result;
+  }
+
   return value;
 }
 
@@ -72,6 +95,6 @@ export class SanitizeInterceptor implements NestInterceptor {
     //   next.handle().pipe( map((data) => sanitize(data)) )
 
     // ⬇️ Reemplaza esta línea por tu implementación.
-    return next.handle();
+    return next.handle().pipe(map((data)=>sanitize(data)));
   }
 }
